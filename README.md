@@ -1,2 +1,2 @@
-# laservec-py
+# laservec
 Python GRPC client for laservec-docker
