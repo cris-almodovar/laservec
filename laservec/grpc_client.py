@@ -29,14 +29,14 @@ class LASER(object):
         self.channel.close()
         self.channel = None
 
-    def vectorize(self, text: str, lang: str=None):
+    def vectorize(self, text: str, lang: str = None):
         assert self.channel is not None
         assert self.stub is not None
 
         req = VectorizeRequest(text=text, lang=lang)
         res = self.stub.vectorize(req)
         if res:
-            return res.lang, np.array(res.embedding)
+            return np.array(res.embedding), res.lang
         return None, None
 
     def __enter__(self):
