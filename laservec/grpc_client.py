@@ -15,6 +15,7 @@
 import grpc
 from laservec.laservec_pb2_grpc import LaserGrpcApiStub
 from laservec.laservec_pb2 import VectorizeRequest
+import numpy as np
 
 
 class LASER(object):
@@ -28,14 +29,14 @@ class LASER(object):
         self.channel.close()
         self.channel = None
 
-    def vectorize(self, lang: str, text: str):
+    def vectorize(self, text: str, lang: str=None):
         assert self.channel is not None
         assert self.stub is not None
 
-        req = VectorizeRequest(lang=lang, text=text)
+        req = VectorizeRequest(text=text, lang=lang)
         res = self.stub.vectorize(req)
         if res:
-            return res.lang, list(res.embedding)
+            return res.lang, np.array(res.embedding)
         return None, None
 
     def __enter__(self):
@@ -43,4 +44,3 @@ class LASER(object):
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.close()
-
